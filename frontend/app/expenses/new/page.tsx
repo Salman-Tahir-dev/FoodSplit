@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../../lib/auth-context';
 import { api } from '../../../lib/api';
 import BottomNav from '../../../components/layout/BottomNav';
 
-export default function NewExpensePage() {
+function NewExpenseContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -267,5 +267,13 @@ export default function NewExpensePage() {
 
       <BottomNav />
     </div>
+  );
+}
+
+export default function NewExpensePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /></div>}>
+      <NewExpenseContent />
+    </Suspense>
   );
 }
