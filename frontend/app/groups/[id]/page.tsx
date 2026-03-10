@@ -55,7 +55,7 @@ function ConfirmDialog({ title, message, confirmLabel, confirmClass, onConfirm, 
 }
 
 export default function GroupDetailPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, refreshUser } = useAuth();
   const router = useRouter();
   const { id } = useParams() as { id: string };
 
@@ -147,7 +147,7 @@ export default function GroupDetailPage() {
       setAdjustment('');
       setDuesNotes('');
       setSelectedMember(null);
-      await loadGroup();
+      await Promise.all([loadGroup(), refreshUser()]);
     } catch (err: any) {
       setDuesError(err.message || 'Failed to update dues.');
     } finally {

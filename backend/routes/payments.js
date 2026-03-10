@@ -3,6 +3,24 @@ const router = express.Router();
 const supabase = require('../lib/supabase');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
+// Sanitize errors - never show technical messages to users
+function userError(error, fallback = 'Something went wrong. Please try again.') {
+  if (!error) return fallback;
+  const msg = error.message || error.toString();
+  // Hide technical/database errors
+  const technical = [
+    'duplicate key', 'violates', 'constraint', 'syntax error',
+    'relation', 'column', 'PGRST', 'JWT', 'supabase', 'postgres',
+    'undefined', 'null value', 'foreign key', 'uuid', 'index',
+    'ERROR:', 'failed to', 'ECONNREFUSED', 'socket'
+  ];
+  if (technical.some(t => msg.toLowerCase().includes(t.toLowerCase()))) {
+    return fallback;
+  }
+  return msg;
+}
+
+
 // POST /api/payments/storage-url — get signed upload URL
 router.post('/storage-url', authenticate, async (req, res) => {
   const { fileName, fileType } = req.body;
@@ -74,7 +92,7 @@ router.get('/pending', authenticate, async (req, res) => {
         .select(`*, users!payments_user_id_fkey ( id, name, email, avatar_url ), groups ( id, name )`)
         .eq('status', 'pending')
         .order('created_at', { ascending: true });
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) return res.status(500).json({ error: userError(error) });
       payments = data;
     } else {
       // Group admin sees pending payments for their groups
@@ -90,7 +108,7 @@ router.get('/pending', authenticate, async (req, res) => {
           .eq('status', 'pending')
           .in('group_id', groupIds)
           .order('created_at', { ascending: true });
-        if (error) return res.status(500).json({ error: error.message });
+        if (error) return res.status(500).json({ error: userError(error) });
         payments = data;
       }
     }
@@ -142,28 +160,24 @@ router.patch('/approve/:id', authenticate, async (req, res) => {
       })
       .eq('id', id).select().single();
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
 
     if (action === 'approved') {
-      // Auto-update member balance
-      const { data: userData } = await supabase
-        .from('users').select('balance').eq('id', payment.user_id).single();
+      // Note: balance is automatically updated by Supabase trigger (update_balance_after_payment)
+      // when payment status changes to 'approved' - no manual update needed here
 
-      if (userData) {
-        const newBalance = parseFloat(userData.balance) + parseFloat(payment.amount);
-        await supabase.from('users')
-          .update({ balance: newBalance, updated_at: new Date().toISOString() })
-          .eq('id', payment.user_id);
-
-        // Log to dues_updates
-        if (payment.group_id) {
+      // Log to dues_updates for history
+      if (payment.group_id) {
+        const { data: userData } = await supabase
+          .from('users').select('balance').eq('id', payment.user_id).single();
+        if (userData) {
           await supabase.from('dues_updates').insert({
             group_id: payment.group_id,
             user_id: payment.user_id,
             updated_by: req.user.id,
             balance_before: parseFloat(userData.balance),
             balance_adjustment: parseFloat(payment.amount),
-            balance_after: newBalance,
+            balance_after: parseFloat(userData.balance) + parseFloat(payment.amount),
             notes: `Payment of ${payment.amount} PKR approved`
           });
         }
@@ -211,7 +225,7 @@ router.post('/upload-receipt', authenticate, async (req, res) => {
       })
       .select().single();
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
 
     // Notify group admins
     if (group_id) {
@@ -263,7 +277,7 @@ router.get('/', authenticate, async (req, res) => {
     if (status) query = query.eq('status', status);
 
     const { data, error } = await query;
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
     res.json({ payments: data });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch payments' });

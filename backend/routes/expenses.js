@@ -3,6 +3,24 @@ const router = express.Router();
 const supabase = require('../lib/supabase');
 const { authenticate } = require('../middleware/auth');
 
+// Sanitize errors - never show technical messages to users
+function userError(error, fallback = 'Something went wrong. Please try again.') {
+  if (!error) return fallback;
+  const msg = error.message || error.toString();
+  // Hide technical/database errors
+  const technical = [
+    'duplicate key', 'violates', 'constraint', 'syntax error',
+    'relation', 'column', 'PGRST', 'JWT', 'supabase', 'postgres',
+    'undefined', 'null value', 'foreign key', 'uuid', 'index',
+    'ERROR:', 'failed to', 'ECONNREFUSED', 'socket'
+  ];
+  if (technical.some(t => msg.toLowerCase().includes(t.toLowerCase()))) {
+    return fallback;
+  }
+  return msg;
+}
+
+
 // GET /api/expenses
 router.get('/', authenticate, async (req, res) => {
   const { group_id, limit = 20, offset = 0 } = req.query;
@@ -28,7 +46,7 @@ router.get('/', authenticate, async (req, res) => {
     }
 
     const { data, error } = await query;
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
     res.json({ expenses: data });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch expenses' });
@@ -70,7 +88,7 @@ router.post('/', authenticate, async (req, res) => {
       })
       .select().single();
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
 
     // Only insert participants who actually ate
     const participantInserts = participant_ids.map(uid => ({
@@ -78,15 +96,8 @@ router.post('/', authenticate, async (req, res) => {
     }));
     await supabase.from('expense_participants').insert(participantInserts);
 
-    // Deduct from each participant's balance
-    for (const uid of participant_ids) {
-      const { data: u } = await supabase.from('users').select('balance').eq('id', uid).single();
-      if (u) {
-        await supabase.from('users')
-          .update({ balance: parseFloat(u.balance) - perPersonAmount })
-          .eq('id', uid);
-      }
-    }
+    // Note: balance is automatically deducted by Supabase trigger (update_balance_after_expense)
+    // when expense_participants rows are inserted above - no manual update needed
 
     // Notify participants (except admin who created)
     const notifInserts = participant_ids
@@ -138,7 +149,7 @@ router.delete('/:id', authenticate, async (req, res) => {
     if (membership?.role !== 'admin' && !req.user.is_admin)
       return res.status(403).json({ error: 'Only group admin can delete expenses' });
     const { error } = await supabase.from('expenses').delete().eq('id', id);
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) return res.status(500).json({ error: userError(error) });
     res.json({ message: 'Expense deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete expense' });
