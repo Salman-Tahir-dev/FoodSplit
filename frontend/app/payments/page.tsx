@@ -40,7 +40,7 @@ function ReceiptModal({ paymentId, onClose }: { paymentId: string; onClose: () =
         <div className="p-4">
           {loading && (
             <div className="flex justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" />
             </div>
           )}
           {error && (
@@ -52,7 +52,7 @@ function ReceiptModal({ paymentId, onClose }: { paymentId: string; onClose: () =
             <>
               <img src={url} alt="Receipt" className="w-full rounded-xl object-contain max-h-96 border border-gray-100" />
               <a href={url} target="_blank" rel="noreferrer"
-                className="mt-3 block text-center text-sm text-indigo-600 border border-indigo-100 rounded-xl py-2.5 hover:bg-indigo-50 font-medium">
+                className="mt-3 block text-center text-sm text-[#FF7043] border border-[#FFF3E0] rounded-xl py-2.5 hover:bg-[#FBE9E7] font-medium">
                 🔗 Open Full Size
               </a>
             </>
@@ -178,7 +178,7 @@ export default function PaymentsPage() {
           )}
         </div>
         <Link href="/payments/new"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
+          className="bg-[#FF7043] hover:bg-[#E64A19] text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
           + Submit
         </Link>
       </div>
@@ -188,13 +188,13 @@ export default function PaymentsPage() {
         <div className="bg-white border-b border-gray-100 flex">
           <button
             onClick={() => setActiveTab('mine')}
-            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${activeTab === 'mine' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-400'}`}
+            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${activeTab === 'mine' ? 'text-[#FF7043] border-b-2 border-[#FF7043]' : 'text-gray-400'}`}
           >
             My Payments
           </button>
           <button
             onClick={() => setActiveTab('pending')}
-            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${activeTab === 'pending' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-400'}`}
+            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${activeTab === 'pending' ? 'text-[#FF7043] border-b-2 border-[#FF7043]' : 'text-gray-400'}`}
           >
             Review
             {pendingPayments.length > 0 && (
@@ -207,7 +207,7 @@ export default function PaymentsPage() {
       <div className="px-4 py-4">
         {fetching ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" />
           </div>
         ) : (
           <>
@@ -219,7 +219,7 @@ export default function PaymentsPage() {
                     <div className="text-5xl mb-3">💳</div>
                     <p className="font-medium text-gray-600 mb-1">No payments yet</p>
                     <p className="text-sm text-gray-400 mb-5">Submit a payment receipt for admin approval</p>
-                    <Link href="/payments/new" className="bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-semibold">
+                    <Link href="/payments/new" className="bg-[#FF7043] text-white px-6 py-3 rounded-xl text-sm font-semibold">
                       + Submit Payment
                     </Link>
                   </div>
@@ -229,7 +229,7 @@ export default function PaymentsPage() {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <p className="font-bold text-gray-800 text-lg">{p.amount} PKR</p>
-                          {p.groups && <p className="text-xs text-indigo-500 mt-0.5">Group: {p.groups.name}</p>}
+                          {p.groups && <p className="text-xs text-[#FF7043] mt-0.5">Group: {p.groups.name}</p>}
                           {p.notes && <p className="text-xs text-gray-500 mt-1 italic">"{p.notes}"</p>}
                           <p className="text-xs text-gray-400 mt-1">{new Date(p.created_at).toLocaleString()}</p>
                         </div>
@@ -257,7 +257,7 @@ export default function PaymentsPage() {
                       {p.receipt_url && (
                         <button
                           onClick={() => setReceiptPaymentId(p.id)}
-                          className="text-xs text-indigo-600 border border-indigo-100 rounded-lg px-3 py-1.5 hover:bg-indigo-50 font-medium"
+                          className="text-xs text-[#FF7043] border border-[#FFF3E0] rounded-lg px-3 py-1.5 hover:bg-[#FBE9E7] font-medium"
                         >
                           📎 View Receipt
                         </button>
@@ -302,13 +302,13 @@ export default function PaymentsPage() {
                         <div>
                           <p className="font-bold text-gray-800 text-xl">{p.amount} PKR</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <div className="bg-indigo-100 rounded-full w-6 h-6 flex items-center justify-center text-indigo-700 font-bold text-xs">
+                            <div className="bg-[#FFF3E0] rounded-full w-6 h-6 flex items-center justify-center text-[#E64A19] font-bold text-xs">
                               {p.users?.name?.[0]?.toUpperCase()}
                             </div>
                             <p className="text-sm font-medium text-gray-700">{p.users?.name}</p>
                           </div>
                           <p className="text-xs text-gray-400 mt-0.5">{p.users?.email}</p>
-                          {p.groups && <p className="text-xs text-indigo-500 mt-1">📌 Group: {p.groups.name}</p>}
+                          {p.groups && <p className="text-xs text-[#FF7043] mt-1">📌 Group: {p.groups.name}</p>}
                           {p.notes && <p className="text-xs text-gray-500 mt-1 italic">"{p.notes}"</p>}
                           <p className="text-xs text-gray-400 mt-1">Submitted: {new Date(p.created_at).toLocaleString()}</p>
                         </div>
@@ -318,7 +318,7 @@ export default function PaymentsPage() {
                       {p.receipt_url && (
                         <button
                           onClick={() => setReceiptPaymentId(p.id)}
-                          className="w-full text-sm text-indigo-600 border border-indigo-100 rounded-xl py-2.5 mb-3 hover:bg-indigo-50 font-medium"
+                          className="w-full text-sm text-[#FF7043] border border-[#FFF3E0] rounded-xl py-2.5 mb-3 hover:bg-[#FBE9E7] font-medium"
                         >
                           📎 View Receipt Screenshot
                         </button>

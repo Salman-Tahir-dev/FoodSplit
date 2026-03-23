@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FBE9E7] to-white flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🔑</div>
@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
             <div className="text-center space-y-4">
               <div className="text-4xl">📧</div>
               <p className="text-gray-700">Check your email for reset instructions.</p>
-              <Link href="/auth/login" className="block text-indigo-600 hover:underline text-sm">Back to login</Link>
+              <Link href="/auth/login" className="block text-[#FF7043] hover:underline text-sm">Back to login</Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -47,19 +47,19 @@ export default function ForgotPasswordPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-indigo-600 text-white rounded-lg py-2.5 text-sm font-medium disabled:opacity-50"
+                className="w-full bg-[#FF7043] text-white rounded-lg py-2.5 text-sm font-medium disabled:opacity-50"
               >
                 {loading ? 'Sending...' : 'Send Reset Email'}
               </button>
               <p className="text-center text-sm">
-                <Link href="/auth/login" className="text-indigo-600 hover:underline">Back to login</Link>
+                <Link href="/auth/login" className="text-[#FF7043] hover:underline">Back to login</Link>
               </p>
             </form>
           )}

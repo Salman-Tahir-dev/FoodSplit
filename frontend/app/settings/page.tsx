@@ -22,7 +22,7 @@ export default function SettingsPage() {
 
       <div className="px-4 py-6 space-y-4">
         <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 text-center">
-          <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold text-2xl mx-auto">
+          <div className="w-16 h-16 bg-[#FFF3E0] rounded-full flex items-center justify-center text-[#E64A19] font-bold text-2xl mx-auto">
             {user.name?.[0]?.toUpperCase()}
           </div>
           <p className="font-bold text-gray-800 mt-3">{user.name}</p>

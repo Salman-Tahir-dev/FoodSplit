@@ -21,17 +21,17 @@ export default function DashboardPage() {
     }
   }, [user]);
 
-  if (loading || !user) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" /></div>;
+  if (loading || !user) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF7043]" /></div>;
 
   const balanceColor = user.balance < -500 ? 'text-red-600' : user.balance < 0 ? 'text-orange-500' : 'text-green-600';
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
-      <div className="bg-indigo-600 text-white px-4 pt-12 pb-6">
+      <div className="bg-[#FF7043] text-white px-4 pt-12 pb-6">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-indigo-200 text-sm">Welcome back,</p>
+            <p className="text-[#FFCCBC] text-sm">Welcome back,</p>
             <h1 className="text-xl font-bold">{user.name}</h1>
             {user.is_admin && (
               <span className="text-xs bg-yellow-400 text-yellow-900 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
@@ -39,12 +39,12 @@ export default function DashboardPage() {
               </span>
             )}
           </div>
-          <button onClick={logout} className="text-indigo-200 hover:text-white text-sm">Logout</button>
+          <button onClick={logout} className="text-[#FFCCBC] hover:text-white text-sm">Logout</button>
         </div>
 
         {/* Balance Card */}
         <div className="mt-6 bg-white/10 rounded-2xl p-4">
-          <p className="text-indigo-200 text-sm">Your Balance</p>
+          <p className="text-[#FFCCBC] text-sm">Your Balance</p>
           <p className={`text-3xl font-bold mt-1 ${user.balance < 0 ? 'text-red-300' : 'text-white'}`}>
             {user.balance >= 0 ? '+' : ''}{user.balance?.toFixed(2)} PKR
           </p>
@@ -55,7 +55,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="px-4 py-6 space-y-6">
-   
+        {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
           <Link href="/expenses/new" className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-3">
             <span className="text-2xl">➕</span>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100">
-            <p className="text-2xl font-bold text-indigo-600">{data?.groups?.length || 0}</p>
+            <p className="text-2xl font-bold text-[#FF7043]">{data?.groups?.length || 0}</p>
             <p className="text-xs text-gray-500 mt-1">Groups</p>
           </div>
           <div className="bg-white rounded-xl p-3 text-center shadow-sm border border-gray-100">
@@ -105,7 +105,7 @@ export default function DashboardPage() {
               {data.groups.map((g: any) => (
                 <Link key={g.id} href={`/groups/${g.id}`} className="flex items-center justify-between bg-white rounded-xl p-3 shadow-sm border border-gray-100">
                   <div className="flex items-center gap-3">
-                    <div className="bg-indigo-100 rounded-full w-9 h-9 flex items-center justify-center text-indigo-600 font-bold">
+                    <div className="bg-[#FFF3E0] rounded-full w-9 h-9 flex items-center justify-center text-[#FF7043] font-bold">
                       {g.name?.[0]?.toUpperCase()}
                     </div>
                     <div>

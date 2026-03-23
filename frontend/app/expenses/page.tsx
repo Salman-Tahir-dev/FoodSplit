@@ -29,14 +29,14 @@ export default function ExpensesPage() {
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4 flex justify-between items-center">
         <h1 className="text-xl font-bold text-gray-900">Expenses</h1>
-        <Link href="/expenses/new" className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium">
+        <Link href="/expenses/new" className="bg-[#FF7043] text-white px-3 py-1.5 rounded-lg text-sm font-medium">
           + Add
         </Link>
       </div>
 
       <div className="px-4 py-4">
         {fetching ? (
-          <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /></div>
+          <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" /></div>
         ) : expenses.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-5xl mb-3">📋</div>

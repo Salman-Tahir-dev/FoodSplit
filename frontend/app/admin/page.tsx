@@ -74,13 +74,13 @@ export default function AdminPage() {
     }
   };
 
-  if (loading || fetching) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" /></div>;
+  if (loading || fetching) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF7043]" /></div>;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-indigo-800 text-white px-4 pt-12 pb-4">
+      <div className="bg-[#BF360C] text-white px-4 pt-12 pb-4">
         <h1 className="text-xl font-bold">⚡ Admin Panel</h1>
-        <p className="text-indigo-300 text-sm mt-1">Manage users, payments & groups</p>
+        <p className="text-[#FFAB91] text-sm mt-1">Manage users, payments & groups</p>
       </div>
 
       {/* Tabs */}
@@ -89,7 +89,7 @@ export default function AdminPage() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`flex-1 py-3 text-sm font-medium capitalize ${tab === t ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}
+            className={`flex-1 py-3 text-sm font-medium capitalize ${tab === t ? 'text-[#FF7043] border-b-2 border-[#FF7043]' : 'text-gray-500'}`}
           >
             {t}
             {t === 'payments' && pendingPayments.length > 0 && (
@@ -105,7 +105,7 @@ export default function AdminPage() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: 'Total Users', value: stats.total_users, color: 'text-indigo-600' },
+                { label: 'Total Users', value: stats.total_users, color: 'text-[#FF7043]' },
                 { label: 'Total Groups', value: stats.total_groups, color: 'text-green-600' },
                 { label: 'Total Expenses', value: stats.total_expenses, color: 'text-purple-600' },
                 { label: 'Pending Payments', value: stats.pending_payments, color: 'text-orange-600' },
@@ -129,7 +129,7 @@ export default function AdminPage() {
                           <p className="text-xs text-gray-500">{p.amount} PKR{p.groups ? ` · ${p.groups.name}` : ''}</p>
                         </div>
                         {p.receipt_url && (
-                          <a href={p.receipt_url} target="_blank" rel="noreferrer" className="text-xs text-indigo-600">View Receipt</a>
+                          <a href={p.receipt_url} target="_blank" rel="noreferrer" className="text-xs text-[#FF7043]">View Receipt</a>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -151,7 +151,7 @@ export default function AdminPage() {
                     </div>
                   ))}
                   {pendingPayments.length > 3 && (
-                    <button onClick={() => setTab('payments')} className="w-full text-sm text-indigo-600 text-center py-2">
+                    <button onClick={() => setTab('payments')} className="w-full text-sm text-[#FF7043] text-center py-2">
                       View all {pendingPayments.length} pending →
                     </button>
                   )}
@@ -181,7 +181,7 @@ export default function AdminPage() {
                     <button
                       onClick={() => handleToggleAdmin(u.id, u.is_admin)}
                       disabled={actionLoading === u.id}
-                      className={`text-xs px-3 py-1.5 rounded-lg font-medium disabled:opacity-50 ${u.is_admin ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'}`}
+                      className={`text-xs px-3 py-1.5 rounded-lg font-medium disabled:opacity-50 ${u.is_admin ? 'bg-red-100 text-red-700' : 'bg-[#FFF3E0] text-[#E64A19]'}`}
                     >
                       {u.is_admin ? 'Revoke Admin' : 'Make Admin'}
                     </button>
@@ -205,11 +205,11 @@ export default function AdminPage() {
                         <p className="font-bold text-gray-800">{p.amount} PKR</p>
                         <p className="text-sm text-gray-600">{p.users?.name}</p>
                         <p className="text-xs text-gray-400">{p.users?.email}</p>
-                        {p.groups && <p className="text-xs text-indigo-500 mt-0.5">Group: {p.groups.name}</p>}
+                        {p.groups && <p className="text-xs text-[#FF7043] mt-0.5">Group: {p.groups.name}</p>}
                         {p.notes && <p className="text-xs text-gray-500 italic mt-1">"{p.notes}"</p>}
                       </div>
                       {p.receipt_url && (
-                        <a href={p.receipt_url} target="_blank" rel="noreferrer" className="text-xs text-indigo-600 border border-indigo-100 rounded-lg px-2 py-1">
+                        <a href={p.receipt_url} target="_blank" rel="noreferrer" className="text-xs text-[#FF7043] border border-[#FFF3E0] rounded-lg px-2 py-1">
                           Receipt
                         </a>
                       )}

@@ -70,7 +70,7 @@ export default function GroupsPage() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" />
+      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF7043]" />
     </div>
   );
 
@@ -86,13 +86,13 @@ export default function GroupsPage() {
           <div className="flex gap-2 flex-shrink-0">
             <button
               onClick={() => setShowJoinCode(true)}
-              className="border border-indigo-200 text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap"
+              className="border border-[#FFCCBC] text-[#FF7043] hover:bg-[#FBE9E7] px-3 py-2 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap"
             >
               🔑 Join
             </button>
             <button
               onClick={() => setShowCreate(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-sm font-semibold flex items-center gap-1 transition-colors whitespace-nowrap"
+              className="bg-[#FF7043] hover:bg-[#E64A19] text-white px-3 py-2 rounded-xl text-sm font-semibold flex items-center gap-1 transition-colors whitespace-nowrap"
             >
               ➕ New
             </button>
@@ -104,23 +104,23 @@ export default function GroupsPage() {
       <div className="px-4 py-4 space-y-3">
         {loadingGroups ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" />
           </div>
         ) : groups.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">👥</div>
             <p className="font-semibold text-gray-600 text-lg">No groups yet</p>
             <p className="text-sm text-gray-400 mt-1 mb-6">Create a group to start splitting expenses</p>
-            <button onClick={() => setShowCreate(true)} className="bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-semibold">
+            <button onClick={() => setShowCreate(true)} className="bg-[#FF7043] text-white px-6 py-3 rounded-xl text-sm font-semibold">
               ➕ Create Your First Group
             </button>
           </div>
         ) : (
           groups.map(g => (
-            <Link key={g.id} href={`/groups/${g.id}`} className="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:border-indigo-200 transition-colors">
+            <Link key={g.id} href={`/groups/${g.id}`} className="block bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:border-[#FFCCBC] transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="bg-indigo-100 rounded-full w-12 h-12 flex items-center justify-center text-indigo-700 font-bold text-xl flex-shrink-0">
+                  <div className="bg-[#FFF3E0] rounded-full w-12 h-12 flex items-center justify-center text-[#E64A19] font-bold text-xl flex-shrink-0">
                     {g.name?.[0]?.toUpperCase()}
                   </div>
                   <div className="min-w-0">

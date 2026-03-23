@@ -73,14 +73,14 @@ export default function NotificationsPage() {
           )}
         </div>
         {unreadCount > 0 && (
-          <button onClick={markAllRead} className="text-sm text-indigo-600 font-medium">Mark all read</button>
+          <button onClick={markAllRead} className="text-sm text-[#FF7043] font-medium">Mark all read</button>
         )}
       </div>
 
       <div className="px-4 py-4 space-y-3">
         {fetching ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" />
           </div>
         ) : (
           <>
@@ -91,9 +91,9 @@ export default function NotificationsPage() {
                   📩 Group Invitations ({invitations.length})
                 </p>
                 {invitations.map(inv => (
-                  <div key={inv.id} className="bg-white rounded-2xl p-4 shadow-sm border-2 border-indigo-200">
+                  <div key={inv.id} className="bg-white rounded-2xl p-4 shadow-sm border-2 border-[#FFCCBC]">
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="bg-indigo-100 rounded-full w-11 h-11 flex items-center justify-center text-xl flex-shrink-0">
+                      <div className="bg-[#FFF3E0] rounded-full w-11 h-11 flex items-center justify-center text-xl flex-shrink-0">
                         👥
                       </div>
                       <div className="flex-1 min-w-0">
@@ -118,7 +118,7 @@ export default function NotificationsPage() {
                       <button
                         onClick={() => handleInviteResponse(inv.id, 'accepted')}
                         disabled={!!respondingId}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-2.5 text-sm font-semibold disabled:opacity-50 transition-colors"
+                        className="flex-1 bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-2.5 text-sm font-semibold disabled:opacity-50 transition-colors"
                       >
                         {respondingId === inv.id + 'accepted' ? '⏳ Joining...' : '✅ Accept & Join'}
                       </button>
@@ -140,14 +140,14 @@ export default function NotificationsPage() {
                   <div
                     key={n.id}
                     onClick={() => !n.is_read && markRead(n.id)}
-                    className={`bg-white rounded-xl p-4 shadow-sm border transition-colors cursor-pointer ${n.is_read ? 'border-gray-100 opacity-60' : 'border-indigo-100'}`}
+                    className={`bg-white rounded-xl p-4 shadow-sm border transition-colors cursor-pointer ${n.is_read ? 'border-gray-100 opacity-60' : 'border-[#FFF3E0]'}`}
                   >
                     <div className="flex gap-3">
                       <span className="text-xl mt-0.5 flex-shrink-0">{typeIcon[n.type] || '💬'}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
                           <p className="font-semibold text-gray-800 text-sm">{n.title}</p>
-                          {!n.is_read && <div className="w-2 h-2 bg-indigo-500 rounded-full mt-1 ml-2 flex-shrink-0" />}
+                          {!n.is_read && <div className="w-2 h-2 bg-[#FF7043] rounded-full mt-1 ml-2 flex-shrink-0" />}
                         </div>
                         <p className="text-sm text-gray-600 mt-0.5 leading-relaxed">{n.message}</p>
                         <p className="text-xs text-gray-400 mt-1">{new Date(n.created_at).toLocaleString()}</p>

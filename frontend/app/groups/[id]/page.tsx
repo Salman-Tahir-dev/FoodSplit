@@ -183,13 +183,13 @@ export default function GroupDetailPage() {
 
   if (loading || loadingData) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" />
+      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF7043]" />
     </div>
   );
   if (error) return (
     <div className="min-h-screen flex items-center justify-center flex-col gap-3 px-4">
       <p className="text-red-500 text-center">{error}</p>
-      <button onClick={() => router.back()} className="text-indigo-600 text-sm">← Go back</button>
+      <button onClick={() => router.back()} className="text-[#FF7043] text-sm">← Go back</button>
     </div>
   );
   if (!group) return null;
@@ -198,12 +198,12 @@ export default function GroupDetailPage() {
     <div className="min-h-screen bg-gray-50 pb-20">
 
       {/* Header */}
-      <div className="bg-indigo-600 text-white px-4 pt-12 pb-6">
-        <button onClick={() => router.back()} className="flex items-center gap-1 text-indigo-200 text-sm mb-4 hover:text-white">
+      <div className="bg-[#FF7043] text-white px-4 pt-12 pb-6">
+        <button onClick={() => router.back()} className="flex items-center gap-1 text-[#FFCCBC] text-sm mb-4 hover:text-white">
           ← Back to Groups
         </button>
         <h1 className="text-2xl font-bold">{group.name}</h1>
-        {group.description && <p className="text-indigo-200 text-sm mt-1">{group.description}</p>}
+        {group.description && <p className="text-[#FFCCBC] text-sm mt-1">{group.description}</p>}
         <div className="flex items-center gap-2 mt-3 flex-wrap">
           <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full">
             👥 {group.members?.length || 0} members
@@ -214,7 +214,7 @@ export default function GroupDetailPage() {
         </div>
         {isGroupAdmin && (
           <div className="mt-4 bg-white/10 rounded-xl px-4 py-3">
-            <p className="text-indigo-200 text-xs mb-1">🔑 Invite Code — members can join using this code</p>
+            <p className="text-[#FFCCBC] text-xs mb-1">🔑 Invite Code — members can join using this code</p>
             <div className="flex items-center justify-between">
               <p className="font-mono font-bold text-2xl tracking-widest">{group.invite_code}</p>
               <button
@@ -234,7 +234,7 @@ export default function GroupDetailPage() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${tab === t ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}
+            className={`flex-1 py-3.5 text-sm font-semibold transition-colors ${tab === t ? 'text-[#FF7043] border-b-2 border-[#FF7043]' : 'text-gray-400 hover:text-gray-600'}`}
           >
             {t === 'members' && '👥 '}
             {t === 'expenses' && '📋 '}
@@ -253,12 +253,12 @@ export default function GroupDetailPage() {
             {isGroupAdmin ? (
               <button
                 onClick={() => { setShowAddMember(true); setAddMemberError(''); setAddMemberSuccess(''); setMemberEmail(''); }}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+                className="w-full bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
               >
                 ➕ Add New Member
               </button>
             ) : (
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700">
+              <div className="bg-[#FFF3E0] border border-[#FFCCBC] rounded-xl p-4 text-sm text-[#E64A19]">
                 ℹ️ Only the group admin can add new members to this group.
               </div>
             )}
@@ -268,13 +268,13 @@ export default function GroupDetailPage() {
                 <div key={m.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="bg-indigo-100 rounded-full w-11 h-11 flex items-center justify-center text-indigo-700 font-bold text-lg flex-shrink-0">
+                      <div className="bg-[#FFF3E0] rounded-full w-11 h-11 flex items-center justify-center text-[#E64A19] font-bold text-lg flex-shrink-0">
                         {m.name?.[0]?.toUpperCase()}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="font-semibold text-gray-800 text-sm">{m.name}</p>
-                          {m.id === user?.id && <span className="text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">You</span>}
+                          {m.id === user?.id && <span className="text-xs bg-[#FFF3E0] text-[#FF7043] px-2 py-0.5 rounded-full">You</span>}
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${m.role === 'admin' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-500'}`}>
                             {m.role === 'admin' ? '⚡ Admin' : 'Member'}
                           </span>
@@ -356,12 +356,12 @@ export default function GroupDetailPage() {
             {isGroupAdmin ? (
               <button
                 onClick={() => router.push(`/expenses/new?group_id=${id}`)}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+                className="w-full bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3.5 text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
               >
                 ➕ Add New Expense
               </button>
             ) : (
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-700">
+              <div className="bg-[#FFF3E0] border border-[#FFCCBC] rounded-xl p-4 text-sm text-[#E64A19]">
                 ℹ️ Only the group admin can add expenses. You will be notified when a new expense is added.
               </div>
             )}
@@ -398,7 +398,7 @@ export default function GroupDetailPage() {
         {/* ── DUES TAB ── */}
         {tab === 'dues' && (
           <div className="space-y-4">
-            <div className={`rounded-xl p-4 border text-sm ${isGroupAdmin ? 'bg-yellow-50 border-yellow-100 text-yellow-800' : 'bg-blue-50 border-blue-100 text-blue-700'}`}>
+            <div className={`rounded-xl p-4 border text-sm ${isGroupAdmin ? 'bg-yellow-50 border-yellow-100 text-yellow-800' : 'bg-[#FFF3E0] border-[#FFCCBC] text-[#E64A19]'}`}>
               {isGroupAdmin
                 ? '⚡ As group admin, tap "Update Dues" on any member to adjust their balance after they pay.'
                 : '💡 This shows everyone\'s current balance. Negative means they owe money.'}
@@ -415,7 +415,7 @@ export default function GroupDetailPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <p className="font-semibold text-gray-800 text-sm">{m.name}</p>
-                          {m.id === user?.id && <span className="text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full">You</span>}
+                          {m.id === user?.id && <span className="text-xs bg-[#FFF3E0] text-[#FF7043] px-2 py-0.5 rounded-full">You</span>}
                         </div>
                         {m.last_payment && (
                           <p className="text-xs text-green-600 mt-0.5">✓ Last paid: {parseFloat(m.last_payment.amount).toFixed(2)} PKR</p>
@@ -433,7 +433,7 @@ export default function GroupDetailPage() {
                       {isGroupAdmin && (
                         <button
                           onClick={() => { setSelectedMember(m); setAdjustment(''); setDuesNotes(''); setDuesError(''); setShowUpdateDues(true); }}
-                          className="mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
+                          className="mt-2 bg-[#FF7043] hover:bg-[#E64A19] text-white text-xs px-3 py-1.5 rounded-lg font-medium transition-colors"
                         >
                           {m.id === user?.id ? '💳 Clear My Dues' : '✏️ Update Dues'}
                         </button>
@@ -486,7 +486,7 @@ export default function GroupDetailPage() {
                 value={memberEmail}
                 onChange={e => setMemberEmail(e.target.value)}
                 placeholder="friend@example.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
                 required
                 autoFocus
               />
@@ -501,7 +501,7 @@ export default function GroupDetailPage() {
               <button type="button" onClick={() => setShowAddMember(false)} className="flex-1 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-600 hover:bg-gray-50">
                 Cancel
               </button>
-              <button type="submit" disabled={addingMember} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors">
+              <button type="submit" disabled={addingMember} className="flex-1 bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors">
                 {addingMember ? 'Adding...' : '➕ Add Member'}
               </button>
             </div>
@@ -522,7 +522,7 @@ export default function GroupDetailPage() {
                 type="button"
                 onClick={handleUpdateDues as any}
                 disabled={updatingDues || !adjustment}
-                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors"
+                className="flex-1 bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors"
               >
                 {updatingDues ? 'Updating...' : '✅ Confirm Update'}
               </button>
@@ -543,7 +543,7 @@ export default function GroupDetailPage() {
               <div className="flex gap-2 mb-3">
                 {['500', '1000', '2000', '5000'].map(v => (
                   <button key={v} type="button" onClick={() => setAdjustment(v)}
-                    className={`flex-1 border rounded-lg py-2 text-xs font-medium transition-colors ${adjustment === v ? 'border-indigo-500 bg-indigo-50 text-indigo-700' : 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100'}`}>
+                    className={`flex-1 border rounded-lg py-2 text-xs font-medium transition-colors ${adjustment === v ? 'border-[#FF8A65] bg-[#FBE9E7] text-[#E64A19]' : 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100'}`}>
                     +{v}
                   </button>
                 ))}
@@ -553,7 +553,7 @@ export default function GroupDetailPage() {
                 value={adjustment}
                 onChange={e => setAdjustment(e.target.value)}
                 placeholder="Or enter custom amount (negative to deduct)"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
               />
               <p className="text-xs text-gray-400 mt-1">Positive = credit (paid dues) · Negative = deduct</p>
             </div>
@@ -564,7 +564,7 @@ export default function GroupDetailPage() {
                 value={duesNotes}
                 onChange={e => setDuesNotes(e.target.value)}
                 placeholder="e.g. Paid cash on 5th March"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
               />
             </div>
             {adjustment && !isNaN(parseFloat(adjustment)) && (

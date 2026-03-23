@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FBE9E7] to-white flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🔒</div>
@@ -75,7 +75,7 @@ export default function ResetPasswordPage() {
               <div className="text-5xl">✅</div>
               <p className="font-semibold text-gray-800">Password updated!</p>
               <p className="text-sm text-gray-500">Redirecting you to login...</p>
-              <Link href="/auth/login" className="block text-indigo-600 text-sm hover:underline">
+              <Link href="/auth/login" className="block text-[#FF7043] text-sm hover:underline">
                 Go to login now →
               </Link>
             </div>
@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
                     required
                     minLength={6}
                   />
@@ -121,7 +121,7 @@ export default function ResetPasswordPage() {
                     className={`w-full border rounded-xl px-3 py-3 text-sm pr-10 focus:outline-none focus:ring-2 ${
                       confirmPassword && password !== confirmPassword
                         ? 'border-red-300 focus:ring-red-400'
-                        : 'border-gray-200 focus:ring-indigo-500'
+                        : 'border-gray-200 focus:ring-[#FF7043]'
                     }`}
                     required
                   />
@@ -141,13 +141,13 @@ export default function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={loading || !accessToken || password !== confirmPassword || password.length < 6}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors"
+                className="w-full bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3 text-sm font-semibold disabled:opacity-50 transition-colors"
               >
                 {loading ? '⏳ Updating...' : '🔒 Set New Password'}
               </button>
 
               <p className="text-center text-sm">
-                <Link href="/auth/login" className="text-indigo-600 hover:underline">← Back to login</Link>
+                <Link href="/auth/login" className="text-[#FF7043] hover:underline">← Back to login</Link>
               </p>
             </form>
           )}

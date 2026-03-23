@@ -78,7 +78,7 @@ export default function NewPaymentPage() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
-        <button onClick={() => router.back()} className="text-indigo-600 text-sm mb-2">← Back</button>
+        <button onClick={() => router.back()} className="text-[#FF7043] text-sm mb-2">← Back</button>
         <h1 className="text-xl font-bold text-gray-900">Submit Payment</h1>
         <p className="text-sm text-gray-500 mt-1">Submit your payment for admin review</p>
       </div>
@@ -95,7 +95,7 @@ export default function NewPaymentPage() {
               onChange={e => setAmount(e.target.value)}
               placeholder="500"
               min="1"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
               required
             />
           </div>
@@ -105,7 +105,7 @@ export default function NewPaymentPage() {
             <select
               value={groupId}
               onChange={e => setGroupId(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043] bg-white"
             >
               <option value="">No specific group</option>
               {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
@@ -116,7 +116,7 @@ export default function NewPaymentPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Receipt Screenshot</label>
             <div
               onClick={() => fileRef.current?.click()}
-              className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-300 transition-colors"
+              className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-[#FFAB91] transition-colors"
             >
               {file ? (
                 <div>
@@ -147,16 +147,16 @@ export default function NewPaymentPage() {
               onChange={e => setNotes(e.target.value)}
               placeholder="e.g. Paid via EasyPaisa"
               rows={3}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
             />
           </div>
 
-          <div className="bg-blue-50 rounded-lg p-3 text-xs text-blue-700">
+          <div className="bg-[#FFF3E0] rounded-lg p-3 text-xs text-[#E64A19]">
             <p>ℹ️ Your payment will be reviewed by the admin. Once approved, your balance will be updated automatically.</p>
           </div>
 
           {uploadProgress && (
-            <div className="bg-indigo-50 rounded-lg p-3 text-sm text-indigo-700 text-center">
+            <div className="bg-[#FBE9E7] rounded-lg p-3 text-sm text-[#E64A19] text-center">
               ⏳ {uploadProgress}
             </div>
           )}
@@ -164,7 +164,7 @@ export default function NewPaymentPage() {
           <button
             type="submit"
             disabled={submitting || uploading}
-            className="w-full bg-indigo-600 text-white rounded-xl py-3 font-medium disabled:opacity-50"
+            className="w-full bg-[#FF7043] text-white rounded-xl py-3 font-medium disabled:opacity-50"
           >
             {submitting ? 'Submitting...' : 'Submit Payment'}
           </button>

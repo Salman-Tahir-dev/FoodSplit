@@ -103,7 +103,7 @@ function NewExpenseContent() {
     return (
       <div className="min-h-screen bg-gray-50 pb-20">
         <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
-          <button onClick={() => router.back()} className="text-indigo-600 text-sm mb-2">← Back</button>
+          <button onClick={() => router.back()} className="text-[#FF7043] text-sm mb-2">← Back</button>
           <h1 className="text-xl font-bold text-gray-900">Add Expense</h1>
         </div>
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -119,7 +119,7 @@ function NewExpenseContent() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
-        <button onClick={() => router.back()} className="text-indigo-600 text-sm mb-2">← Back</button>
+        <button onClick={() => router.back()} className="text-[#FF7043] text-sm mb-2">← Back</button>
         <h1 className="text-xl font-bold text-gray-900">Add Expense</h1>
         <p className="text-sm text-gray-500 mt-1">Only charged to selected participants</p>
       </div>
@@ -134,7 +134,7 @@ function NewExpenseContent() {
             <select
               value={groupId}
               onChange={e => handleGroupChange(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043] bg-white"
               required
             >
               <option value="">Select a group</option>
@@ -149,7 +149,7 @@ function NewExpenseContent() {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="e.g. Dinner, Groceries, Electricity bill"
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
               required
             />
           </div>
@@ -163,7 +163,7 @@ function NewExpenseContent() {
               onChange={e => setAmount(e.target.value)}
               placeholder="0"
               min="1"
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
               required
             />
           </div>
@@ -177,7 +177,7 @@ function NewExpenseContent() {
                 </label>
                 <div className="flex gap-2">
                   <button type="button" onClick={() => setSelectedParticipants(new Set(groupMembers.map((m: any) => m.id)))}
-                    className="text-xs text-indigo-600 font-medium hover:underline">All</button>
+                    className="text-xs text-[#FF7043] font-medium hover:underline">All</button>
                   <span className="text-gray-300">|</span>
                   <button type="button" onClick={() => setSelectedParticipants(new Set())}
                     className="text-xs text-red-500 font-medium hover:underline">None</button>
@@ -186,7 +186,7 @@ function NewExpenseContent() {
 
               {loadingMembers ? (
                 <div className="flex justify-center py-4">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600" />
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#FF7043]" />
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -199,12 +199,12 @@ function NewExpenseContent() {
                         onClick={() => toggleParticipant(m.id)}
                         className={`w-full flex items-center justify-between rounded-xl px-4 py-3 border transition-colors ${
                           selected
-                            ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
+                            ? 'bg-[#FBE9E7] border-[#FFAB91] text-[#E64A19]'
                             : 'bg-white border-gray-200 text-gray-500'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${selected ? 'bg-indigo-200 text-indigo-700' : 'bg-gray-100 text-gray-500'}`}>
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm ${selected ? 'bg-[#FFCCBC] text-[#E64A19]' : 'bg-gray-100 text-gray-500'}`}>
                             {m.name?.[0]?.toUpperCase()}
                           </div>
                           <div className="text-left">
@@ -212,7 +212,7 @@ function NewExpenseContent() {
                             <p className="text-xs opacity-60">{m.role === 'admin' ? '⚡ Admin' : 'Member'}</p>
                           </div>
                         </div>
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selected ? 'bg-indigo-600 border-indigo-600' : 'border-gray-300'}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${selected ? 'bg-[#FF7043] border-[#FF7043]' : 'border-gray-300'}`}>
                           {selected && <span className="text-white text-xs font-bold">✓</span>}
                         </div>
                       </button>
@@ -251,14 +251,14 @@ function NewExpenseContent() {
               onChange={e => setDescription(e.target.value)}
               placeholder="Any extra details..."
               rows={2}
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7043]"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting || selectedParticipants.size === 0 || !amount || !title || !groupId}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3.5 font-semibold disabled:opacity-50 transition-colors"
+            className="w-full bg-[#FF7043] hover:bg-[#E64A19] text-white rounded-xl py-3.5 font-semibold disabled:opacity-50 transition-colors"
           >
             {submitting ? '⏳ Adding...' : `➕ Add Expense (${perPersonAmount} PKR × ${selectedParticipants.size})`}
           </button>
@@ -272,7 +272,7 @@ function NewExpenseContent() {
 
 export default function NewExpensePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FF7043]" /></div>}>
       <NewExpenseContent />
     </Suspense>
   );
