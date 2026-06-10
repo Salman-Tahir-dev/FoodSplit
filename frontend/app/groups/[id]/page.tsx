@@ -71,6 +71,7 @@ export default function GroupDetailPage() {
   const [showUpdateDues, setShowUpdateDues] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [memberToRemove, setMemberToRemove] = useState<any>(null);
 
   const [memberEmail, setMemberEmail] = useState('');
@@ -116,7 +117,7 @@ export default function GroupDetailPage() {
   const isGroupAdmin = group?.my_role === 'admin' || user?.is_admin;
   const myDues = dues.find(m => m.id === user?.id);
   const myBalance = myDues ? parseFloat(myDues.balance ?? 0) : null;
-  // Can leave if dues are loaded AND balance is >= 0 (zero means all clear, positive means overpaid/credited)
+  // Can leave if group dues are loaded AND this group's balance is >= 0 (zero means all clear, positive means overpaid/credited)
   const canLeave = myBalance !== null && myBalance >= 0;
   const duesLoaded = myBalance !== null;
 
@@ -174,6 +175,17 @@ export default function GroupDetailPage() {
     setActionLoading(true);
     try {
       await api.leaveGroup(id);
+      router.push('/groups');
+    } catch (err: any) {
+      alert(err.message);
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    setActionLoading(true);
+    try {
+      await api.deleteGroup(id);
       router.push('/groups');
     } catch (err: any) {
       alert(err.message);
@@ -281,7 +293,7 @@ export default function GroupDetailPage() {
                         </div>
                         <p className="text-xs text-gray-400 mt-0.5 truncate">{m.email}</p>
                         <p className={`text-xs font-semibold mt-1 ${parseFloat(m.balance) < 0 ? 'text-red-500' : 'text-green-600'}`}>
-                          Balance: {parseFloat(m.balance) >= 0 ? '+' : ''}{parseFloat(m.balance || 0).toFixed(2)} PKR
+                          Group balance: {parseFloat(m.balance) >= 0 ? '+' : ''}{parseFloat(m.balance || 0).toFixed(2)} PKR
                         </p>
                       </div>
                     </div>
@@ -298,6 +310,31 @@ export default function GroupDetailPage() {
               ))}
             </div>
 
+            {isGroupAdmin && (
+              <div className="mt-6 border-t border-gray-100 pt-5">
+                <div className="rounded-xl p-4 border border-red-100 bg-red-50">
+                  <p className="font-semibold text-red-700 text-sm mb-2">🗑️ Delete this group</p>
+                  {group.members?.length > 1 ? (
+                    <p className="text-xs text-red-600">
+                      Remove all other members before deleting the group. You currently need to remove {group.members.length - 1} more member{group.members.length - 1 === 1 ? '' : 's'}.
+                    </p>
+                  ) : (
+                    <>
+                      <p className="text-xs text-red-600 mb-3">
+                        This will permanently delete the group and all related data.
+                      </p>
+                      <button
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl py-3 text-sm font-semibold transition-colors"
+                      >
+                        Delete Group
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Leave Group section for regular members */}
             {!isGroupAdmin && (
               <div className="mt-6 border-t border-gray-100 pt-5">
@@ -309,28 +346,28 @@ export default function GroupDetailPage() {
                   <p className="font-semibold text-gray-800 text-sm mb-2">🚪 Leave this Group</p>
 
                   {!duesLoaded && (
-                    <p className="text-xs text-gray-400 mb-3">Checking your balance...</p>
+                    <p className="text-xs text-gray-400 mb-3">Checking your group balance...</p>
                   )}
 
                   {duesLoaded && canLeave && myBalance === 0 && (
                     <p className="text-xs text-green-700 mb-3">
-                      ✅ Your balance is <strong>0 PKR</strong> — all dues are cleared. You can safely leave.
+                      ✅ Your group balance is <strong>0 PKR</strong> — all dues in this group are cleared. You can safely leave.
                     </p>
                   )}
 
                   {duesLoaded && canLeave && myBalance > 0 && (
                     <p className="text-xs text-green-700 mb-3">
-                      ✅ Your balance is <strong>+{myBalance.toFixed(2)} PKR</strong> — you are in credit. You can leave the group.
+                      ✅ Your group balance is <strong>+{myBalance.toFixed(2)} PKR</strong> — you are in credit in this group. You can leave the group.
                     </p>
                   )}
 
                   {duesLoaded && !canLeave && (
                     <div className="mb-3">
                       <p className="text-xs text-red-600 font-medium mb-1">
-                        ❌ You cannot leave yet — you owe <strong>{Math.abs(myBalance!).toFixed(2)} PKR</strong>
+                        ❌ You cannot leave yet — you owe <strong>{Math.abs(myBalance!).toFixed(2)} PKR</strong> in this group
                       </p>
                       <p className="text-xs text-red-500">
-                        Submit your payment receipt to the admin. Once approved, your balance will be updated and you can leave.
+                        Submit your payment receipt to the admin for this group. Once approved, your group balance will be updated and you can leave.
                       </p>
                     </div>
                   )}
@@ -342,7 +379,7 @@ export default function GroupDetailPage() {
                       canLeave ? 'bg-red-500 hover:bg-red-600 text-white shadow-sm' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
                   >
-                    {!duesLoaded ? '⏳ Loading...' : canLeave ? '🚪 Leave Group' : `🔒 Clear ${Math.abs(myBalance!).toFixed(2)} PKR dues to leave`}
+                    {!duesLoaded ? '⏳ Loading...' : canLeave ? '🚪 Leave Group' : `🔒 Clear ${Math.abs(myBalance!).toFixed(2)} PKR in this group to leave`}
                   </button>
                 </div>
               </div>
@@ -531,7 +568,7 @@ export default function GroupDetailPage() {
         >
           <div className="bg-gray-50 rounded-xl p-3 mb-4">
             <p className="text-sm font-semibold text-gray-800">{selectedMember.name}</p>
-            <p className="text-xs text-gray-500 mt-0.5">Current balance:
+            <p className="text-xs text-gray-500 mt-0.5">Current group balance:
               <span className={`font-bold ml-1 ${parseFloat(selectedMember.balance) < 0 ? 'text-red-600' : 'text-green-600'}`}>
                 {parseFloat(selectedMember.balance || 0).toFixed(2)} PKR
               </span>
@@ -569,7 +606,7 @@ export default function GroupDetailPage() {
             </div>
             {adjustment && !isNaN(parseFloat(adjustment)) && (
               <div className={`rounded-xl p-3 text-sm font-medium ${parseFloat(adjustment) >= 0 ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'}`}>
-                New balance will be: <strong>{(parseFloat(selectedMember.balance || 0) + parseFloat(adjustment)).toFixed(2)} PKR</strong>
+                New group balance will be: <strong>{(parseFloat(selectedMember.balance || 0) + parseFloat(adjustment)).toFixed(2)} PKR</strong>
               </div>
             )}
             {duesError && (
@@ -582,7 +619,7 @@ export default function GroupDetailPage() {
       {showRemoveConfirm && memberToRemove && (
         <ConfirmDialog
           title="🗑️ Remove Member"
-          message={`Are you sure you want to remove ${memberToRemove.name} from this group? Their current balance is ${parseFloat(memberToRemove.balance || 0).toFixed(2)} PKR.`}
+          message={`Are you sure you want to remove ${memberToRemove.name} from this group? Their current group balance is ${parseFloat(memberToRemove.balance || 0).toFixed(2)} PKR.`}
           confirmLabel="Yes, Remove Member"
           confirmClass="bg-red-500 hover:bg-red-600"
           onConfirm={handleRemoveMember}
@@ -599,6 +636,18 @@ export default function GroupDetailPage() {
           confirmClass="bg-red-500 hover:bg-red-600"
           onConfirm={handleLeaveGroup}
           onCancel={() => setShowLeaveConfirm(false)}
+          loading={actionLoading}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <ConfirmDialog
+          title="🗑️ Delete Group"
+          message="This will permanently delete the group and all related records. This action cannot be undone."
+          confirmLabel="Delete Group"
+          confirmClass="bg-red-600 hover:bg-red-700"
+          onConfirm={handleDeleteGroup}
+          onCancel={() => setShowDeleteConfirm(false)}
           loading={actionLoading}
         />
       )}

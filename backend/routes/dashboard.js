@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../lib/supabase');
 const { authenticate } = require('../middleware/auth');
+const { getGroupBalanceDetails } = require('../lib/groupBalances');
 
 // GET /api/dashboard
 router.get('/', authenticate, async (req, res) => {
@@ -15,6 +16,14 @@ router.get('/', authenticate, async (req, res) => {
       .eq('user_id', userId);
 
     const groupIds = memberships?.map(m => m.group_id) || [];
+    const groupBalances = new Map();
+
+    await Promise.all((memberships || []).map(async (membership) => {
+      const members = await getGroupBalanceDetails(supabase, membership.group_id);
+      const me = members.find(item => item.id === userId);
+      groupBalances.set(membership.group_id, me ? me.balance : 0);
+    }));
+    const groupNetBalance = Array.from(groupBalances.values()).reduce((total, value) => total + (Number(value) || 0), 0);
 
     // Get recent expenses
     let recentExpenses = [];
@@ -47,7 +56,8 @@ router.get('/', authenticate, async (req, res) => {
 
     res.json({
       user: req.user,
-      groups: memberships?.map(m => ({ ...m.groups, role: m.role })) || [],
+      groups: memberships?.map(m => ({ ...m.groups, role: m.role, balance: groupBalances.get(m.group_id) ?? 0 })) || [],
+      group_net_balance: groupNetBalance,
       recent_expenses: recentExpenses,
       pending_payments_count: pendingPaymentsCount,
       unread_notifications: unreadCount || 0

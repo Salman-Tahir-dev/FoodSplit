@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../lib/supabase');
 const { authenticate } = require('../middleware/auth');
+const { getGroupBalanceDetails, getGroupBalanceForMember } = require('../lib/groupBalances');
 
 async function isGroupAdmin(userId, groupId) {
   const { data } = await supabase
@@ -11,6 +12,16 @@ async function isGroupAdmin(userId, groupId) {
     .eq('user_id', userId)
     .single();
   return data && data.role === 'admin';
+}
+
+async function getGroupMemberCount(groupId) {
+  const { count, error } = await supabase
+    .from('group_members')
+    .select('id', { count: 'exact', head: true })
+    .eq('group_id', groupId);
+
+  if (error) throw error;
+  return count || 0;
 }
 
 // ── FIXED ROUTE ORDER: all static/named routes BEFORE /:id ──────────────────
@@ -132,20 +143,63 @@ router.get('/:id', authenticate, async (req, res) => {
 
     if (error || !group) return res.status(404).json({ error: 'Group not found' });
 
-    const { data: members } = await supabase
-      .from('group_members')
-      .select(`role, joined_at, users ( id, name, email, balance, avatar_url )`)
-      .eq('group_id', id);
+    const members = await getGroupBalanceDetails(supabase, id);
 
     res.json({
       group: {
         ...group,
         my_role: membership.role,
-        members: members.map(m => ({ ...m.users, role: m.role, joined_at: m.joined_at }))
+        members
       }
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch group' });
+  }
+});
+
+// DELETE /api/groups/:id — group admin can delete once the group is empty except for themselves
+router.delete('/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data: group, error: groupError } = await supabase
+      .from('groups')
+      .select('id, created_by')
+      .eq('id', id)
+      .single();
+
+    if (groupError || !group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+
+    const { data: membership } = await supabase
+      .from('group_members')
+      .select('role')
+      .eq('group_id', id)
+      .eq('user_id', req.user.id)
+      .single();
+
+    const isGlobalAdmin = !!req.user.is_admin;
+    const isCreator = group.created_by === req.user.id;
+    const isAdminInGroup = membership?.role === 'admin';
+
+    if (!isGlobalAdmin && !isCreator && !isAdminInGroup) {
+      return res.status(403).json({ error: 'Only the group admin can delete this group' });
+    }
+
+    if (!isGlobalAdmin) {
+      const memberCount = await getGroupMemberCount(id);
+      if (memberCount > 1) {
+        return res.status(400).json({ error: 'Remove all other members before deleting this group' });
+      }
+    }
+
+    const { error } = await supabase.from('groups').delete().eq('id', id);
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.json({ message: 'Group deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete group' });
   }
 });
 
@@ -164,11 +218,10 @@ router.delete('/:id/leave', authenticate, async (req, res) => {
       return res.status(400).json({ error: 'Group admin cannot leave. Transfer admin role to another member first.' });
     }
 
-    // Check user balance — must be >= 0 (no outstanding dues)
-    const { data: userData } = await supabase
-      .from('users').select('balance').eq('id', req.user.id).single();
-    if (userData && parseFloat(userData.balance) < 0) {
-      return res.status(400).json({ error: `You have outstanding dues of ${Math.abs(parseFloat(userData.balance)).toFixed(2)} PKR. Please clear your dues before leaving.` });
+    // Check group-specific balance — must be >= 0 (no outstanding dues in this group)
+    const groupBalance = await getGroupBalanceForMember(supabase, id, req.user.id);
+    if (groupBalance !== null && groupBalance < 0) {
+      return res.status(400).json({ error: `You have outstanding dues of ${Math.abs(groupBalance).toFixed(2)} PKR in this group. Please clear your dues before leaving.` });
     }
 
     const { error } = await supabase
@@ -191,21 +244,7 @@ router.get('/:id/dues', authenticate, async (req, res) => {
 
     if (!membership) return res.status(403).json({ error: 'Not a member of this group' });
 
-    const { data: members, error } = await supabase
-      .from('group_members')
-      .select(`role, joined_at, users ( id, name, email, balance, avatar_url )`)
-      .eq('group_id', id);
-
-    if (error) return res.status(500).json({ error: error.message });
-
-    const memberDues = await Promise.all(members.map(async (m) => {
-      const { data: latestPayment } = await supabase
-        .from('payments').select('amount, status, created_at')
-        .eq('user_id', m.users.id).eq('group_id', id).eq('status', 'approved')
-        .order('created_at', { ascending: false }).limit(1).single();
-
-      return { ...m.users, role: m.role, joined_at: m.joined_at, last_payment: latestPayment || null };
-    }));
+    const memberDues = await getGroupBalanceDetails(supabase, id);
 
     res.json({ dues: memberDues });
   } catch (err) {

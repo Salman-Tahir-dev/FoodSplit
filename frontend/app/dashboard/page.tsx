@@ -23,7 +23,10 @@ export default function DashboardPage() {
 
   if (loading || !user) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FF7043]" /></div>;
 
-  const balanceColor = user.balance < -500 ? 'text-red-600' : user.balance < 0 ? 'text-orange-500' : 'text-green-600';
+  const groupNetBalance = typeof data?.group_net_balance === 'number'
+    ? data.group_net_balance
+    : (data?.groups || []).reduce((total: number, group: any) => total + (Number(group.balance) || 0), 0);
+  const balanceColor = groupNetBalance < -500 ? 'text-red-600' : groupNetBalance < 0 ? 'text-orange-500' : 'text-green-600';
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -44,11 +47,12 @@ export default function DashboardPage() {
 
         {/* Balance Card */}
         <div className="mt-6 bg-white/10 rounded-2xl p-4">
-          <p className="text-[#FFCCBC] text-sm">Your Balance</p>
-          <p className={`text-3xl font-bold mt-1 ${user.balance < 0 ? 'text-red-300' : 'text-white'}`}>
-            {user.balance >= 0 ? '+' : ''}{user.balance?.toFixed(2)} PKR
+          <p className="text-[#FFCCBC] text-sm">Net Balance Across All Groups</p>
+          <p className={`text-3xl font-bold mt-1 ${groupNetBalance < 0 ? 'text-red-300' : 'text-white'}`}>
+            {groupNetBalance >= 0 ? '+' : ''}{groupNetBalance.toFixed(2)} PKR
           </p>
-          {user.balance < -500 && (
+          <p className="text-[#FFCCBC] text-xs mt-2">This is the sum of all your group balances.</p>
+          {groupNetBalance < -500 && (
             <p className="text-red-300 text-xs mt-2">⚠️ Balance below -500 PKR. Please clear payment.</p>
           )}
         </div>
@@ -111,6 +115,9 @@ export default function DashboardPage() {
                     <div>
                       <p className="font-medium text-gray-800 text-sm">{g.name}</p>
                       <p className="text-xs text-gray-500 capitalize">{g.role}</p>
+                      <p className={`text-xs font-semibold mt-0.5 ${g.balance < 0 ? 'text-red-500' : 'text-green-600'}`}>
+                        Group balance: {g.balance >= 0 ? '+' : ''}{parseFloat(g.balance || 0).toFixed(2)} PKR
+                      </p>
                     </div>
                   </div>
                   <span className="text-gray-400">›</span>

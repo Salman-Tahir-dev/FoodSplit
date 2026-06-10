@@ -14,8 +14,21 @@ class ApiClient {
       ...options,
       headers: { ...this.getHeaders(), ...options.headers },
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
+    const contentType = res.headers.get('content-type') || '';
+    const raw = await res.text();
+
+    let data: any = null;
+    if (raw) {
+      if (contentType.includes('application/json')) {
+        data = JSON.parse(raw);
+      } else {
+        throw new Error(
+          `API returned ${contentType || 'non-JSON'} from ${endpoint}. Check NEXT_PUBLIC_API_URL and ensure the backend is running at ${API_URL}.`
+        );
+      }
+    }
+
+    if (!res.ok) throw new Error(data?.error || 'Request failed');
     return data;
   }
 
@@ -85,6 +98,7 @@ class ApiClient {
     return this.request<{ expense: any }>('/expenses', { method: 'POST', body: JSON.stringify(data) });
   }
   deleteExpense(id: string) { return this.request(`/expenses/${id}`, { method: 'DELETE' }); }
+  deleteGroup(id: string) { return this.request(`/groups/${id}`, { method: 'DELETE' }); }
 
   // Payments
   getStorageUrl(fileName: string, fileType: string) {
